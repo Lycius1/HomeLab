@@ -1,0 +1,19 @@
+# Secrets
+.env
+*.key
+*.pem
+*.secret
+
+# Wazuh cloned repo certs
+wazuh-docker/single-node/config/wazuh_indexer_ssl_certs/
+
+# Wazuh cloned repo (external dependency)
+wazuh-docker/.git/
+
+# Logs
+*.log
+
+# OS
+Thumbs.db
+.DS_Store
+wazuh-docker/
