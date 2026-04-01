@@ -21,10 +21,10 @@ volumes:
   filebeat_etc:
   filebeat_var:
   wazuh_indexer_data:
+  technitium_data:
 
 services:
 
-  # --- Graylog stack ---
   mongodb:
     image: mongo:6.0
     container_name: mongodb
@@ -69,14 +69,13 @@ services:
       - GRAYLOG_ELASTICSEARCH_HOSTS=http://opensearch:9200
       - GRAYLOG_MONGODB_URI=mongodb://mongodb:27017/graylog
     ports:
-      - "9000:9000"       # Web UI
-      - "1514:1514/udp"   # Syslog UDP
-      - "1514:1514"       # Syslog TCP
-      - "12201:12201/udp" # GELF UDP
+      - "9000:9000"
+      - "1514:1514/udp"
+      - "1514:1514"
+      - "12201:12201/udp"
     volumes:
       - graylog_data:/usr/share/graylog/data
 
-  # --- Grafana ---
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -90,56 +89,12 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
 
-  # --- Wazuh ---
-  wazuh.manager:
-    image: wazuh/wazuh-manager:4.7.5
-    container_name: wazuh-manager
+  technitium:
+    image: technitium/dns-server:latest
+    container_name: technitium
     restart: unless-stopped
-    networks:
-      - homelab
-    ports:
-      - "1515:1515"
-      - "55000:55000"
-    volumes:
-      - wazuh_api_configuration:/var/ossec/api/configuration
-      - wazuh_etc:/var/ossec/etc
-      - wazuh_logs:/var/ossec/logs
-      - wazuh_queue:/var/ossec/queue
-      - wazuh_var_multigroups:/var/ossec/var/multigroups
-      - wazuh_integrations:/var/ossec/integrations
-      - wazuh_active_response:/var/ossec/active-response/bin
-      - wazuh_agentless:/var/ossec/agentless
-      - wazuh_wodles:/var/ossec/wodles
-      - filebeat_etc:/etc/filebeat
-      - filebeat_var:/var/lib/filebeat
-
-  wazuh.indexer:
-    image: wazuh/wazuh-indexer:4.7.5
-    container_name: wazuh-indexer
-    restart: unless-stopped
-    networks:
-      - homelab
-    ports:
-      - "9201:9200"
+    network_mode: host
     environment:
-      - OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m
+      - DNS_SERVER_DOMAIN=homelab.local
     volumes:
-      - wazuh_indexer_data:/var/lib/wazuh-indexer
-
-  wazuh.dashboard:
-    image: wazuh/wazuh-dashboard:4.7.5
-    container_name: wazuh-dashboard
-    restart: unless-stopped
-    networks:
-      - homelab
-    ports:
-      - "8443:5601"
-    depends_on:
-      - wazuh.indexer
-    environment:
-      - INDEXER_URL=https://wazuh.indexer:9200
-      - INDEXER_USERNAME=admin
-      - INDEXER_PASSWORD=admin
-      - WAZUH_API_URL=https://wazuh.manager
-      - API_USERNAME=wazuh-wui
-      - API_PASSWORD=MyS3cr37P450r.*-
+      - technitium_data:/etc/dns
