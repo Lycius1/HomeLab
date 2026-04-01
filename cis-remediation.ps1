@@ -211,10 +211,8 @@ Set-RegValue -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection" -N
 # ============================================================
 Write-Host "`n[*] System Hardening..." -ForegroundColor Cyan
 Set-RegValue -Path "HKLM:\System\CurrentControlSet\Control\SAM" -Name "RelaxMinimumPasswordLengthLimits" -Value 1 -Type DWord -Description "CIS 26004: Ensure 'Relax minimum password length limits' is set to"
-Set-RegValue -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System" -Name "NoConnectedUser" -Value 3 -Type DWord -Description "CIS 26008: Ensure 'Accounts: Block Microsoft accounts' is set to '"
 Set-RegValue -Path "HKLM:\System\CurrentControlSet\Control\Print\Providers\LanMan Print Services\Servers" -Name "AddPrinterDrivers" -Value 1 -Type DWord -Description "CIS 26015: Ensure 'Devices: Prevent users from installing printer "
 Set-RegValue -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System" -Name "DisableCAD" -Value 0 -Type DWord -Description "CIS 26022: Ensure 'Interactive logon: Do not require CTRL+ALT+DEL'"
-Set-RegValue -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System" -Name "DontDisplayLastUserName" -Value 1 -Type DWord -Description "CIS 26023: Ensure 'Interactive logon: Don't display last signed-in"
 Set-RegValue -Path "HKLM:\System\CurrentControlSet\Services\LanmanWorkstation\Parameters" -Name "RequireSecuritySignature" -Value 1 -Type DWord -Description "CIS 26031: Ensure 'Microsoft network client: Digitally sign commun"
 Set-RegValue -Path "HKLM:\System\CurrentControlSet\Services\LanManServer\Parameters" -Name "RequireSecuritySignature" -Value 1 -Type DWord -Description "CIS 26035: Ensure 'Microsoft network server: Digitally sign commun"
 Set-RegValue -Path "HKLM:\System\CurrentControlSet\Services\LanManServer\Parameters" -Name "EnableSecuritySignature" -Value 1 -Type DWord -Description "CIS 26036: Ensure 'Microsoft network server: Digitally sign commun"
